@@ -1,3 +1,3 @@
 /// <reference path="../frida-il2cpp-bridge/src/index.ts" />
-/// <reference path="./dictionary.ts" />
-/// <reference path="./list.ts" />
+/// <reference path="./collections/dictionary.ts" />
+/// <reference path="./collections/list.ts" />
