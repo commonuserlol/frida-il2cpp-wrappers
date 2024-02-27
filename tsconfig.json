@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "target": "ES2022",
+      "lib": [ "ES2022" ],
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "outFile": "dist/index.js",
+      "sourceRoot": ".",
+      "declaration": true,
+      "experimentalDecorators": true,
+      "sourceMap": true,
+      "strict": true,
+      "stripInternal": true,
+      "paths": {
+        "@frida-il2cpp-bridge/*": [
+        "./frida-il2cpp-bridge/*"
+        ],
+        "@/*": [
+            "./src/*"
+        ]
+        }
+    }   
+}

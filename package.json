@@ -1,0 +1,39 @@
+{
+    "name": "frida-il2cpp-wrappers",
+    "version": "0.1.0",
+    "description": "Extension for frida-il2cpp-bridge to support MS & Unity stdlib.",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/commonuserlol/frida-il2cpp-wrappers"
+    },
+    "license": "MIT",
+    "author": "commonuserlol",
+    "exports": "./dist/index.js",
+    "module": "dist/index.js",
+    "main": "dist/index.js",
+    "type": "module",
+    "types": "dist/index.d.ts",
+    "files": [
+      "dist"
+    ],
+    "scripts": {
+      "prepare": "tsc"
+    },
+    "prettier": {
+      "arrowParens": "avoid",
+      "bracketSpacing": true,
+      "printWidth": 160,
+      "tabWidth": 4,
+      "trailingComma": "none"
+    },
+    "devDependencies": {
+      "@types/frida-gum": "^18.4.3",
+      "ts-patch": "^3.0.2",
+      "ts-transformer-inline-file": "^0.2.0"
+    },
+    "overrides": {
+      "ts-transformer-inline-file": {
+          "typescript": "^5.0.0"
+      }
+    }
+}
