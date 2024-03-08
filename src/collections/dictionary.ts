@@ -3,29 +3,28 @@ namespace Il2Cpp {
         /** @internal */
         zip = (a: globalThis.Array<K>, b: globalThis.Array<V>) => a.map((k, i) => [k, b[i]]);
 
-
         /** Gets the pairs count of the current dictionary. */
-        get length(): number {
+        get length() {
             return this.method<number>("get_Count").invoke();
         }
 
-        /** Gets all pairs of the current dictionary. */
-        get entries() {
-            return this.zip(this.keys, this.values);
-        }
-
         /** Gets all keys of the current dictionary. */
-        get keys(): K[] {
+        get keys() {
             const keys = Il2Cpp.array<K>(this.class.generics[0], this.length);
             (this.method<Il2Cpp.Object>("get_Keys").invoke()).method("CopyTo").invoke(keys, 0);
             return keys.elements.read(this.length);
         }
 
         /** Gets all values of the current dictionary. */
-        get values(): V[] {
+        get values() {
             const values = Il2Cpp.array<V>(this.class.generics[1], this.length);
             (this.method<Il2Cpp.Object>("get_Values").invoke()).method("CopyTo").invoke(values, 0);
             return values.elements.read(this.length);
+        }
+
+        /** Gets all pairs of the current dictionary. */
+        get entries() {
+            return this.zip(this.keys, this.values);
         }
 
         /** Gets the value by the specified key of the current dictionary. */
@@ -44,24 +43,34 @@ namespace Il2Cpp {
             this.method("set_Item").invoke(key, value);
         }
 
+        /** Adds a new key to the current dictionary. */
+        add(key: K, value: V) {
+            this.method("Add").invoke(key, value);
+        }
+
         /** Clears the current dictionary. */
         clear() {
             this.method("Clear").invoke();
         }
 
         /** Determines if the key is in the current dictionary. */
-        containsKey(key: K): boolean {
+        containsKey(key: K) {
             return this.method<boolean>("ContainsKey").invoke(key);
         }
 
         /** Determines if the value is in the current dictionary. */
-        containsValue(value: V): boolean {
+        containsValue(value: V) {
             return this.method<boolean>("ContainsValue").invoke(value);
         }
 
         /** Finds a key in the current dictionary and returns its index. */
-        find(key: K): number {
+        find(key: K) {
             return this.method<number>("FindEntry").invoke(key);
+        }
+
+        /** Removes the given key from the current dictionary. */
+        remove(key: K) {
+            return this.method<boolean>("Remove").invoke(key);
         }
 
         *[Symbol.iterator](): IterableIterator<[K, V]> {
@@ -72,23 +81,21 @@ namespace Il2Cpp {
         }
 
         /** */
-        toString(): string {
+        toString() {
             return this.isNull() ? "null" : `{${[...this.entries.entries()].map(([k, v]) => `${k}: ${v}`).join(", ")}}`;
         }
     }
 
     /** Creates a new dictionary with the given elements. */
-    export function dictionary<K extends Il2Cpp.Field.Type = Il2Cpp.Field.Type, V extends Il2Cpp.Field.Type = Il2Cpp.Field.Type>(keyClass: Il2Cpp.Class, valueClass: Il2Cpp.Class, elements?: Map<K, V>): Il2Cpp.Dictionary<K, V> {
+    export function dictionary<K extends Il2Cpp.Field.Type = Il2Cpp.Field.Type, V extends Il2Cpp.Field.Type = Il2Cpp.Field.Type>(keyClass: Il2Cpp.Class, valueClass: Il2Cpp.Class, elements?: Map<K, V>): Dictionary<K, V> {
         const dictionary = new Il2Cpp.Dictionary<K, V>(
             Il2Cpp.corlib.class("System.Collections.Generic.Dictionary`2")
-            .inflate(keyClass, valueClass)
-            .alloc()
+                .inflate(keyClass, valueClass)
+                .alloc()
         );
 
-        if (elements) {
-            for (const [key, value] of elements) {
-                dictionary.set(key, value);
-            }
+        for (const [key, value] of elements ?? []) {
+            dictionary.set(key, value);
         }
 
         return dictionary;

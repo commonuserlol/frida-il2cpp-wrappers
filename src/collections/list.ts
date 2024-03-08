@@ -1,26 +1,33 @@
 namespace Il2Cpp {
     export class List<T extends Il2Cpp.Field.Type = Il2Cpp.Field.Type> extends Il2Cpp.Object {
+        get capacity(): number {
+            return this.method<number>("get_Capacity").invoke();
+        }
+
+        set capacity(value: number) {
+            this.method("set_Capacity").invoke(value);
+        }
+
         /** Gets the element count of the current list. */
         get length(): number {
             return this.method<number>("get_Count").invoke();
         }
-
-        /** Converts the current list to an array. */
-        get toArray(): Il2Cpp.Array<T> {
-            return this.method<Il2Cpp.Array<T>>("ToArray").invoke();
-        }
-
+        
         /** Gets the value by the specified index of the current list. */
         get(index: number): T {
             return this.method<T>("get_Item").invoke(index);
         }
 
-        /** Sets the pair of the current list. */
+        /** Sets the element of the current list. */
         set(index: number, value: T) {
             if (this.contains(value))
                 warn(`the given element ${value} is already in the list. It will be overwritten with the new value ${value}`);
 
             this.method("set_Item").invoke(index, value);
+        }
+
+        add(item: T) {
+            this.method("Add").invoke(item);
         }
 
         /** Clears the current list. */
@@ -58,6 +65,11 @@ namespace Il2Cpp {
             this.method("Sort").invoke();
         }
 
+        /** Converts the current list to an array. */
+        get toArray(): Il2Cpp.Array<T> {
+            return this.method<Il2Cpp.Array<T>>("ToArray").invoke();
+        }
+
         /** Iterable. */
         *[Symbol.iterator](): IterableIterator<T> {
             for (let i = 0; i < this.length; i++) {
@@ -69,5 +81,20 @@ namespace Il2Cpp {
         toString(): string {
             return this.toArray.toString();
         }
+    }
+
+    /** Creates a new list with the given elements. */
+    export function list<T extends Il2Cpp.Field.Type = Il2Cpp.Field.Type>(klass: Il2Cpp.Class, elements: T[] = []): List<T> {
+        const list = new Il2Cpp.List<T>(
+            Il2Cpp.corlib.class("System.Collections.Generic.List`1")
+                .inflate(klass)
+                .alloc()
+        );
+
+        for (const element of elements) {
+            list.add(element);
+        }
+
+        return list;
     }
 }
